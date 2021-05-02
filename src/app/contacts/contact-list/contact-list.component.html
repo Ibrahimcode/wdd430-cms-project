@@ -1,0 +1,46 @@
+<div class="comtainer-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default clearfix">
+        <div
+          class="panel-heading"
+          style="
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <h1 class="panel-title" style="display: inline-block">Contacts</h1>
+          <div class="btn btn-success pull-right" style="display: inline-block">
+            Add Contact
+          </div>
+        </div>
+        <div class="panel-body">
+          <div
+            class="container-fluid list-group-item"
+            *ngFor="let contact of contacts"
+            style="padding: 10px"
+          >
+            <div class="clearfix" style="border: 2px #ddd">
+              <div
+                class="list-group-item-heading"
+                style="display: inline-block"
+              >
+                {{ contact.name }}
+              </div>
+              <span class="pull-right">
+                <img
+                  [src]="contact.imageUrl"
+                  [alt]="contact.name"
+                  class="image-responsive"
+                  style="max-height: 50px"
+                />
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

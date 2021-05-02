@@ -1,0 +1,52 @@
+<div class="comtainer-fluid">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default clearfix">
+        <div
+          class="panel-heading"
+          style="
+            padding: 10px;
+
+            align-items: center;
+          "
+        >
+          <h1 class="panel-title" style="display: inline-block"></h1>
+          <div class="row">
+            <div class="col-md-8"><img src="" alt="" /></div>
+            <div
+              class="col-md-4"
+              style="display: flex; justify-content: space-between"
+            >
+              <div class="btn btn-success" style="display: inline-block">
+                Edit
+              </div>
+              <div class="btn btn-danger" style="display: inline-block">
+                Delete
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div
+            class="container-fluid"
+            ngFor="let contact of contacts"
+            style="padding: 10px"
+          >
+            <div class="clearfix" style="border: 2px #ddd">
+              <div class="list-group-item-heading">Email:</div>
+              <div class="list-group-item-heading">Phone:</div>
+              <!-- <span class="pull-right">
+                <img
+                  [src]="contact.imageUrl"
+                  [alt]="contact.name"
+                  class="image-responsive"
+                  style="max-height: 50px"
+                />
+              </span> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
