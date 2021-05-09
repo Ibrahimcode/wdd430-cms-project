@@ -1,4 +1,4 @@
-<!-- <div class="comtainer-fluid">
+<a class="comtainer-fluid">
   <div class="row">
     <div class="col-xs-12">
       <div class="panel panel-default clearfix">
@@ -17,11 +17,7 @@
           </div>
         </div>
         <div class="panel-body">
-          <div
-            class="container-fluid list-group-item"
-            *ngFor="let contact of contacts"
-            style="padding: 10px"
-          >
+          <div class="container-fluid list-group-item" style="padding: 10px">
             <div class="clearfix" style="border: 2px #ddd">
               <div
                 class="list-group-item-heading"
@@ -43,10 +39,4 @@
       </div>
     </div>
   </div>
-</div> -->
-
-<cms-contact-item
-  *ngFor="let contact of contacts"
-  [contact]="contact"
-  (click)="onSelected(contact)"
-></cms-contact-item>
+</a>
