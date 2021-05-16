@@ -15,7 +15,7 @@ export class ContactListComponent implements OnInit {
       'R. Kent Jackson',
       'jacksonk@byui.edu',
       208 - 496 - 3771,
-      '/assets/images/barzeer.jpg',
+      '/assets/images/jacksonk.jpg',
       null
     ),
     new Contact(
@@ -23,7 +23,7 @@ export class ContactListComponent implements OnInit {
       'Rex Barzee',
       'barzeer@byui.edu',
       208 - 496 - 3768,
-      '/assets/images/jacksonk.jpg',
+      '/assets/images/barzeer.jpg',
       null
     ),
   ];
