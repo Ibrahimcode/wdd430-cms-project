@@ -28,8 +28,13 @@
               <div class="row" style="align-self: baseline">
                 <div class="col-md-8"><img src="" alt="" /></div>
                 <div class="row pull-right margin-left-right">
-                  <a class="btn btn-success"> Edit </a>
-                  <a class="btn btn-danger"> Delete </a>
+                  <a
+                    [routerLink]="['/contacts', contact.id, 'edit']"
+                    class="btn btn-success"
+                  >
+                    Edit
+                  </a>
+                  <a (click)="onDelete()" class="btn btn-danger"> Delete </a>
                 </div>
               </div>
             </div>
