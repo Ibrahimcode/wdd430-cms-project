@@ -11,7 +11,9 @@
             align-items: center;
           "
         >
-          <h1 class="panel-title" style="display: inline-block">Contacts</h1>
+          <h1 dnd-draggable class="panel-title" style="display: inline-block">
+            Contacts
+          </h1>
           <a
             routerLink="new"
             class="btn btn-success pull-right"
@@ -22,8 +24,12 @@
         </div>
 
         <cms-contact-item
-          routerLink="{{ contact.id }}"
           *ngFor="let contact of contacts"
+          dnd-draggable
+          [dragEnabled]="true"
+          [dragData]="contact"
+          [dropZones]="['contactGroup']"
+          routerLink="{{ contact.id }}"
           [contact]="contact"
           (click)="onSelected(contact)"
         ></cms-contact-item>

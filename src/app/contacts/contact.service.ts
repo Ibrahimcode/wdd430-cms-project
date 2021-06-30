@@ -21,14 +21,7 @@ export class ContactService {
   }
 
   getContact(id: string): Contact {
-    let contactFound = {
-      id: '',
-      name: '',
-      email: '',
-      phone: '',
-      imageUrl: '',
-      group: '',
-    };
+    let contactFound!: Contact;
     this.contacts.forEach((contact) => {
       if (contact.id === id) {
         contactFound = contact;
@@ -84,6 +77,7 @@ export class ContactService {
     this.contacts[pos] = newContact;
     const documentListClone = this.contacts.slice();
     this.contactListChangeEvent.next(documentListClone);
+    console.log(newContact);
   }
 
   deleteContact(document: Contact) {

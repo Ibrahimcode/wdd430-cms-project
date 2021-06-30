@@ -30,6 +30,10 @@ export class ContactListComponent implements OnInit {
     this.contactService.contactSelectedEvent.emit(contact);
   }
 
+  drag() {
+    console.log('draged');
+  }
+
   ngOnDestroy(): void {
     this.subscribtion.unsubscribe();
   }

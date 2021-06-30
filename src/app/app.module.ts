@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -18,6 +19,8 @@ import { DropDownDirective } from './drop-down.directive';
 import { AppRoutingModule } from './app-routing.module';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
+import { DndModule } from 'ng2-dnd';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,13 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
     DocumentEditComponent,
     ContactEditComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    DndModule.forRoot(),
+    DragDropModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

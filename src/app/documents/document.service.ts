@@ -22,7 +22,7 @@ export class DocumentService {
   }
 
   getDocument(id: string) {
-    let documentFound = { id: '', name: '', description: '', url: '' };
+    let documentFound!: Document; // = { id: '', name: '', description: '', url: '' };
     this.documents.forEach((document) => {
       if (document.id === id) {
         documentFound = document;

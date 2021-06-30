@@ -4,7 +4,7 @@
       <div class="list-group-item-heading" style="display: inline-block">
         {{ contact.name }}
       </div>
-      <span class="pull-right">
+      <span class="pull-right" *ngIf="contact.imageUrl != ' '">
         <img
           [src]="contact.imageUrl"
           [alt]="contact.name"

@@ -15,7 +15,7 @@
               <h1 class="panel-title">
                 {{ contact.name }}
               </h1>
-              <span class="pull-left">
+              <span class="pull-left" *ngIf="contact.imageUrl != ' '">
                 <img
                   [src]="contact.imageUrl"
                   [alt]="contact.name"
