@@ -16,6 +16,7 @@ export class ContactEditComponent implements OnInit {
   groupContacts: Contact[] = [];
   editMode: boolean = false;
   id!: string;
+  contactExist!: boolean;
   constructor(
     private contactService: ContactService,
     private router: Router,
@@ -77,14 +78,17 @@ export class ContactEditComponent implements OnInit {
       return true;
     }
     if (this.contact && newContact.id === this.contact.id) {
+      this.contactExist = true;
       return true;
     }
     for (let i = 0; i < this.groupContacts.length; i++) {
       if (newContact.id === this.groupContacts[i].id) {
+        this.contactExist = true;
         return true;
       }
     }
 
+    this.contactExist = false;
     return false;
   }
 

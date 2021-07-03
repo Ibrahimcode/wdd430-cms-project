@@ -79,6 +79,11 @@
         <div class="form-group">
           <label for="groupList">Group Contacts:</label>
 
+          <div class="alert alert-danger" *ngIf="contactExist">
+            Contact cannot be added to the group. It is already in the group or
+            is the current contact.
+          </div>
+
           <div
             class="row"
             id="groupList"

@@ -53,6 +53,17 @@
               <div class="list-group-item-heading">
                 Phone: {{ contact.phone }}
               </div>
+              <!-- For team -->
+              <div *ngIf="contact.group">
+                <div *ngIf="contact.imageUrl != ' '">Contacts in team:</div>
+                <div
+                  class="list-group-item-heading"
+                  *ngFor="let contact of contact.group"
+                >
+                  <cms-contact-item class="col-sm-11" [contact]="contact">
+                  </cms-contact-item>
+                </div>
+              </div>
             </div>
           </div>
         </div>
