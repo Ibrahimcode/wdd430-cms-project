@@ -11,17 +11,16 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit {
   subscribtion!: Subscription;
   contacts: Contact[] = [];
+  term!: string;
   constructor(public contactService: ContactService) {}
 
   ngOnInit(): void {
     this.contacts = this.contactService.getContacts();
-    // this.contactService.contactChangeEvent.subscribe((contactArray) => {
-    //   this.contacts = contactArray;
-    // });
 
     this.subscribtion = this.contactService.contactListChangeEvent.subscribe(
       (contactList) => {
         this.contacts = contactList;
+        console.log(this.contacts);
       }
     );
   }
@@ -36,5 +35,9 @@ export class ContactListComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscribtion.unsubscribe();
+  }
+
+  search(value: string) {
+    this.term = value;
   }
 }

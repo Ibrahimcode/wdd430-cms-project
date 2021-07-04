@@ -1,10 +1,10 @@
-<div *ngIf="contact.imageUrl" class="panel-body">
+<div class="panel-body">
   <div class="container-fluid list-group-item" style="padding: 10px">
     <div class="clearfix" style="border: 2px #ddd">
       <div class="list-group-item-heading" style="display: inline-block">
         {{ contact.name }}
       </div>
-      <span class="pull-right" *ngIf="contact.imageUrl != ' '">
+      <span class="pull-right" *ngIf="contact.imageUrl">
         <img
           [src]="contact.imageUrl"
           [alt]="contact.name"
