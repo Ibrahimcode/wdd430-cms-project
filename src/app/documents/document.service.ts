@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { EventEmitter, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import Document from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 
@@ -12,13 +13,41 @@ export class DocumentService {
   // documentChangedEvent = new EventEmitter<Document[]>();
   documents: Document[] = [];
   maxDocumentId!: number;
-  constructor() {
+  constructor(private http: HttpClient) {
     this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
   }
 
   getDocuments() {
-    return this.documents.slice();
+    //return this.documents.slice();
+    let documentList: Document[] = [];
+
+    this.http
+      .get<Document[]>(
+        'https://cmsapp-10283-default-rtdb.firebaseio.com/documents.json'
+      )
+      .subscribe(
+        // success method
+        (documents) => {
+          // console.log(document);
+          this.documents = documents;
+          this.maxDocumentId = this.getMaxId();
+          this.documents.sort();
+
+          const documentListClone = this.documents.slice();
+
+          this.documentListChangedEvent.next(documentListClone);
+
+          documentList = this.documents.slice();
+        },
+        // error method
+        (error: any) => {
+          console.log(error);
+        }
+      );
+    return documentList;
+
+    //return this.documents.slice();
   }
 
   getDocument(id: string) {
@@ -63,8 +92,9 @@ export class DocumentService {
     this.maxDocumentId++;
     newDocument.id = this.maxDocumentId.toString();
     this.documents.push(newDocument);
-    const documentListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentListClone);
+    // const documentListClone = this.documents.slice();
+    // this.documentListChangedEvent.next(documentListClone);
+    this.storeDocuments();
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
@@ -77,8 +107,9 @@ export class DocumentService {
     }
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
-    const documentListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentListClone);
+    // const documentListClone = this.documents.slice();
+    // this.documentListChangedEvent.next(documentListClone);
+    this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
@@ -90,7 +121,22 @@ export class DocumentService {
       return;
     }
     this.documents.splice(pos, 1);
-    const documentListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentListClone);
+    // const documentListClone = this.documents.slice();
+    // this.documentListChangedEvent.next(documentListClone);
+    this.storeDocuments();
+  }
+
+  storeDocuments() {
+    let documentsList = JSON.stringify(this.documents);
+    this.http
+      .put(
+        'https://cmsapp-10283-default-rtdb.firebaseio.com/documents.json',
+        documentsList,
+        { headers: new HttpHeaders({ 'content-type': 'application/json' }) }
+      )
+      .subscribe(() => {
+        const documentListClone = this.documents.slice();
+        this.documentListChangedEvent.next(documentListClone);
+      });
   }
 }
