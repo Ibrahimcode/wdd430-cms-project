@@ -2,6 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Contact } from './contact.model';
+import {
+  ContactGetResponse,
+  ContactPostResponse,
+} from './contact.response.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 
 @Injectable({
@@ -21,13 +25,11 @@ export class ContactService {
     // return this.contacts.slice();
     let contactList!: Contact[];
     this.http
-      .get<Contact[]>(
-        'https://cmsapp-10283-default-rtdb.firebaseio.com/contacts.json'
-      )
+      .get<ContactGetResponse>('http://localhost:3000/contacts')
       .subscribe(
         (contacts) => {
-          // console.log(contacts);
-          this.contacts = contacts;
+          console.log(contacts);
+          this.contacts = contacts.contacts;
           this.maxContactId = this.getMaxId();
           this.contacts.sort();
 
@@ -36,7 +38,7 @@ export class ContactService {
           this.contactListChangeEvent.next(contactListClone);
 
           contactList = contactListClone;
-          // console.log(contactList);
+          console.log('contactList received');
         },
         // error method
         (error: any) => {
@@ -85,55 +87,64 @@ export class ContactService {
     if (!newContact) {
       return;
     }
-    this.maxContactId++;
-    newContact.id = this.maxContactId.toString();
-    this.contacts.push(newContact);
-    // const documentListClone = this.contacts.slice();
-    // this.contactListChangeEvent.next(documentListClone);
-    this.storeContacts();
+    // make sure id of the new Document is empty
+    newContact.id = ''; // The sequence generator will generate an id.
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // add to database
+    this.http
+      .post<ContactPostResponse>('http://localhost:3000/contacts', newContact, {
+        headers: headers,
+      })
+      .subscribe((responseData) => {
+        // add new contact to contacts
+        this.contacts.push(responseData.contact);
+        this.contacts.sort();
+        const contactListClone = this.contacts.slice();
+        this.contactListChangeEvent.next(contactListClone);
+      });
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
     if (!originalContact || !newContact) {
       return;
     }
-    const pos = this.contacts.indexOf(originalContact);
+    const pos = this.contacts.findIndex((c) => c.id === originalContact.id);
     if (pos < 0) {
       return;
     }
+    // set the id of the new Document to the id of the old Document
     newContact.id = originalContact.id;
-    this.contacts[pos] = newContact;
-    // const documentListClone = this.contacts.slice();
-    // this.contactListChangeEvent.next(documentListClone);
-    // console.log(newContact);
-    this.storeContacts();
+    // newContact._id = originalContact._id;
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // update database
+    this.http
+      .put('http://localhost:3000/contacts/' + originalContact.id, newContact, {
+        headers: headers,
+      })
+      .subscribe(() => {
+        this.contacts[pos] = newContact;
+        this.contacts.sort();
+        const contactListClone = this.contacts.slice();
+        this.contactListChangeEvent.next(contactListClone);
+      });
   }
 
-  deleteContact(document: Contact) {
-    if (!document) {
+  deleteContact(contact: Contact) {
+    if (!contact) {
       return;
     }
-    const pos = this.contacts.indexOf(document);
+    const pos = this.contacts.findIndex((c) => c.id === contact.id);
     if (pos < 0) {
       return;
     }
-    this.contacts.splice(pos, 1);
-    // const documentListClone = this.contacts.slice();
-    // this.contactListChangeEvent.next(documentListClone);
-    this.storeContacts();
-  }
-
-  storeContacts() {
-    let contactsList = JSON.stringify(this.contacts);
+    // delete from database
     this.http
-      .put(
-        'https://cmsapp-10283-default-rtdb.firebaseio.com/contacts.json',
-        contactsList,
-        { headers: new HttpHeaders({ 'content-type': 'application/json' }) }
-      )
+      .delete('http://localhost:3000/contacts/' + contact.id)
       .subscribe(() => {
-        const documentListClone = this.contacts.slice();
-        this.contactListChangeEvent.next(documentListClone);
+        this.contacts.splice(pos, 1);
+        this.contacts.sort();
+        const contactListClone = this.contacts.slice();
+        this.contactListChangeEvent.next(contactListClone);
       });
   }
 }

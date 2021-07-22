@@ -32,7 +32,7 @@ export class MessageEditComponent implements OnInit {
 
     // const message = new Message(1234, this.subject, this.msgText, this.currentSender,)
     const message = {
-      id: '123',
+      id: '123', // The sequence generator will generate and change this id.
       subject: sub,
       msgText: text,
       sender: this.currentSender,

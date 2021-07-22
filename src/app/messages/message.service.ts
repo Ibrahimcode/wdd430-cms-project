@@ -3,6 +3,10 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import Message from './message.model';
+import {
+  MessageGetResponse,
+  MessagePostResponse,
+} from './message.response.model';
 import { MOCKMESSAGES } from './MOCKMESSAGES';
 
 @Injectable({
@@ -32,10 +36,29 @@ export class MessageService {
   }
 
   addMessage(message: Message) {
-    this.messages.push(message);
+    // this.messages.push(message);
     // this.messageChangedEvent.next(this.messages.slice());
     // console.log('added ' + this.messages);
-    this.storeMessages();
+    // this.storeMessages();
+
+    if (!message) {
+      return;
+    }
+    // make sure id of the new Document is empty
+    message.id = ''; // The sequence generator will generate an id.
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // add to database
+    this.http
+      .post<MessagePostResponse>('http://localhost:3000/messages', message, {
+        headers: headers,
+      })
+      .subscribe((responseData) => {
+        // add new message to messages
+        this.messages.push(responseData.message);
+        this.messages.sort();
+        const messageListClone = this.messages.slice();
+        this.messageChangedEvent.next(messageListClone);
+      });
   }
 
   getMaxId() {
@@ -54,13 +77,11 @@ export class MessageService {
   getMessages(): Message[] {
     let messageList!: Message[];
     this.http
-      .get<Message[]>(
-        'https://cmsapp-10283-default-rtdb.firebaseio.com/messages.json'
-      )
+      .get<MessageGetResponse>('http://localhost:3000/messages/')
       .subscribe(
         (messages) => {
           // console.log(document);
-          this.messages = messages;
+          this.messages = messages.messages;
           this.maxMessageId = this.getMaxId();
           this.messages.sort();
 
@@ -77,19 +98,5 @@ export class MessageService {
       );
 
     return messageList;
-  }
-
-  storeMessages() {
-    let messageList = JSON.stringify(this.messages);
-    this.http
-      .put(
-        'https://cmsapp-10283-default-rtdb.firebaseio.com/messages.json',
-        messageList,
-        { headers: new HttpHeaders({ 'content-type': 'application/json' }) }
-      )
-      .subscribe(() => {
-        const documentListClone = this.messages.slice();
-        this.messageChangedEvent.next(documentListClone);
-      });
   }
 }
